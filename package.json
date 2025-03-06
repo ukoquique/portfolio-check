@@ -1,0 +1,22 @@
+{
+  "name": "developer-portfolio",
+  "version": "1.0.0",
+  "description": "Professional developer portfolio website",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "portfolio",
+    "developer",
+    "java",
+    "fullstack"
+  ],
+  "author": "Java Developer",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
