@@ -2,6 +2,9 @@
 
 A clean, modern, and responsive portfolio website designed to showcase Java development skills, projects, and services. This portfolio features a minimalistic dark theme design optimized for both desktop and mobile devices.
 
+![Last Updated](https://img.shields.io/badge/Last%20Updated-April%202025-blue)
+![Code Quality](https://img.shields.io/badge/Code%20Quality-Enhanced-brightgreen)
+
 ## Table of Contents
 - [Features](#features)
 - [Technologies Used](#technologies-used)
@@ -19,11 +22,11 @@ A clean, modern, and responsive portfolio website designed to showcase Java deve
 - **Minimalistic Design**: Clean, professional dark theme with strong visual appeal
 - **Fully Responsive**: Optimized for desktop, tablet, and mobile devices
 - **Project Showcase**: Categorized display of projects (CodeGym Academy, Commercial, Team Projects)
-- **Interactive Demos**: Direct launching of applications like the Ecosystem Simulation and Caesar Cipher
+- **Interactive Demos**: Direct launching of applications like the Ecosystem Simulation and Code Processor
 - **Project Overviews**: Modal-based detailed information about projects
 - **Skills Section**: Visual representation of technical skills and expertise
 - **About Me**: Professional introduction with photo
-- **Contact Form**: Direct communication channel for potential clients
+- **Contact Form**: Direct communication channel with validation and error handling
 - **Social Media Integration**: Links to professional profiles
 - **Smooth Animations**: Enhanced user experience with subtle animations
 
@@ -31,6 +34,7 @@ A clean, modern, and responsive portfolio website designed to showcase Java deve
 
 - **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
 - **Server**: Node.js with native HTTP module
+- **Architecture**: Modular JavaScript with clean separation of concerns
 - **Styling**: Custom CSS with CSS Variables for theming
 - **Icons**: Font Awesome
 - **Fonts**: Google Fonts (Roboto, Montserrat)
@@ -48,28 +52,69 @@ portfolio/
 ├── css/
 │   └── styles.css      # Main stylesheet with all styling
 ├── js/
-│   └── main.js         # JavaScript for interactive functionality
-├── assets/             # Assets directory containing images and other resources
-│   └── images/         # Profile and other images
-├── images/             # Project images
+│   ├── main.js         # Main entry point and initialization (fully modularized)
+│   └── modules/        # Modular architecture components
+│       ├── business/   # Business logic modules
+│       │   └── businessLogic.js # Core business functions
+│       ├── ui/         # UI component modules
+│       │   ├── Modal.js         # Modal component for project overviews
+│       │   └── uiComponents.js  # UI creation and management
+│       ├── events/     # Event handler modules
+│       │   └── eventHandlers.js # Event handling functions
+│       ├── data/       # Data management modules
+│       │   └── projectData.js   # Project data and configuration
+│       ├── config/     # Configuration modules
+│       │   └── appConfig.js     # Application configuration
+│       ├── services/   # Service modules
+│       │   └── apiService.js    # Enhanced API service with retry logic
+│       └── utils/      # Utility modules
+│           ├── errorHandler.js  # Client-side error handling
+│           ├── notifications.js # Notification system
+│           ├── accessibility.js # Accessibility features
+│           └── lazyLoading.js   # Image lazy loading
+├── images/             # Project and profile images
+├── server/             # Server-side code
+│   ├── config.js       # Server configuration
+│   ├── router.js       # API routing with Promise-based handlers
+│   └── utils/          # Server utilities
+│       ├── errorHandler.js # Enhanced error handling with custom error types
+│       └── logger.js   # Structured logging system
 └── projects/           # Project-specific files and launch scripts
-    └── ecosystem-simulation/  # Ecosystem Simulation project files
-        └── launch.js   # Server-side script to launch the Java application
+    ├── ecosystem-simulation/  # Ecosystem Simulation project files
+    │   └── launch.js   # Server-side script to launch the Java application
+    └── caesar-cipher/  # Caesar Cipher project files
+        ├── index.html  # Caesar Cipher web interface
+        └── start_cipher.sh # Script to launch Caesar Cipher
 ```
 
 ## Setup and Installation
 
-1. **Install dependencies**
+1. **Prerequisites**
+   - Node.js version 14.x or higher
+   - npm version 6.x or higher
+   - To check your versions, run:
+   ```bash
+   node --version
+   npm --version
+   ```
+
+2. **Clone the repository**
+   ```bash
+   git clone https://github.com/HectorCorbellini/Portfolio-windsurf-march6.git
+   cd Portfolio-windsurf-march6
+   ```
+
+3. **Install dependencies**
    ```bash
    npm install
    ```
 
-2. **Make the start script executable**
+3. **Make the start script executable**
    ```bash
    chmod +x start_portfolio.sh
    ```
 
-3. **Start the development server**
+4. **Start the development server**
    ```bash
    npm run start
    ```
@@ -78,13 +123,13 @@ portfolio/
    ./start_portfolio.sh
    ```
 
-4. **Access the portfolio**
+5. **Access the portfolio**
    Open your browser and navigate to:
    ```
    http://localhost:3001/
    ```
 
-5. **Development mode with auto-reload**
+6. **Development mode with auto-reload**
    ```bash
    npm run dev
    ```
@@ -93,16 +138,22 @@ portfolio/
 
 ## Server Configuration
 
-The project uses a Node.js server (server.js) with these key features:
+The portfolio uses a simple Node.js server with the following configuration options in `server/config.js`:
 
-- **Port Configuration**: Default port is 3001 (configurable via PORT environment variable)
-- **Static File Serving**: Automatically serves HTML, CSS, JS, and image files
-- **MIME Type Support**: Properly sets content types for various file extensions
+- **Port**: Default is 3001, can be changed in the config file or via environment variables
+- **Host**: Default is 'localhost', configurable via environment variables
+- **Environment**: Development or production mode (NODE_ENV)
+- **Caching**: Enabled in production mode, disabled in development
+- **MIME Types**: Configured for all common web file types
+- **Error Handling**: Comprehensive error handling with custom error types
+- **Logging**: Structured logging with different levels based on environment for various file extensions
 - **Fallback to Index**: Routes unknown paths back to index.html
 - **API Endpoints**: Handles requests to launch applications like the Ecosystem Simulation
 - **Process Management**: Executes and manages external applications
+- **Error Handling**: Comprehensive error handling with custom error classes
 
-To change the default port, set the PORT environment variable when running the server:
+To change the port, set the PORT environment variable before starting the server:
+
 ```bash
 PORT=8080 npm run start
 ```
@@ -121,37 +172,52 @@ Edit the following sections in `index.html`:
 
 ### Projects
 
-Project data is stored in the `main.js` file. Modify the following arrays to add your own projects:
+Project data is now stored in the `js/modules/data/projectData.js` file. Modify the following sections to add your own projects:
 
-- `codegymProjects`: CodeGym Academy projects
-- `commercialProjects`: Commercial applications
-- `teamProjects`: Team and open-source projects
+- `projectData.codegymProjects`: CodeGym Academy projects
+- `projectData.commercialProjects`: Commercial applications
+- `projectData.teamProjects`: Team and open-source projects
 
 Each project object should include:
 ```javascript
 {
+  key: "uniqueProjectKey", // Unique identifier for the project
   title: "Project Name",
   description: "Brief project description",
   image: "/images/project-image.jpg",
   tags: ["Java", "Spring", "MySQL"],
-  demoLink: "https://demo-link.com", // Use '#' for projects with custom launch functionality
-  codeLink: "https://github.com/username/repo",
-  // Optional: For projects with detailed overviews
-  overview: {
-    features: ["Feature 1", "Feature 2"],
-    technologies: ["Technology 1", "Technology 2"],
-    instructions: ["Instruction 1", "Instruction 2"]
+  demoLink: "https://demo-link.com", // Use null for projects with custom launch functionality
+  codeLink: "https://github.com/username/repo"
+}
+```
+
+For detailed project configuration, add an entry to the `projectConfig` object:
+```javascript
+projectConfig: {
+  uniqueProjectKey: {
+    title: "Project Name",
+    overview: {
+      description: "Detailed project description",
+      features: ["Feature 1", "Feature 2"],
+      technologies: ["Technology 1", "Technology 2"],
+      instructions: ["Instruction 1", "Instruction 2"]
+    }
   }
 }
 ```
 
 ### Interactive Applications
 
-The portfolio supports launching Java applications directly from the browser:
+The portfolio supports launching various applications directly from the browser:
 
-1. **Create a launch script**: Add a server-side script in the project directory
+1. **Create a launch script**: Add a server-side script in the project directory (e.g., `projects/code-processor/launch.js`)
 2. **Update server.js**: Add an API endpoint to handle the launch request
-3. **Configure the project**: Set `demoLink` to `#` and add a click handler for the Demo button
+3. **Configure the project**: Set `demoLink` to `null`, add a `launchHandler` property, and ensure the feature flag is enabled in `appConfig.js`
+4. **Register the handler**: Add the handler function to the handler registry in the `initProjects` function in `main.js`
+
+Currently implemented interactive applications:
+- **Ecosystem Simulation**: Java-based ecosystem simulation
+- **Code Processor**: Python desktop application for processing code files
 
 ### Styling
 
@@ -173,21 +239,14 @@ The color scheme can be modified in the `:root` section of `styles.css`. The cur
 
 ### Common Issues
 
-1. **Start Script Permission Issues**
-   - Error: `Permission denied` when running `./start_portfolio.sh`
-   - Solution: Make the script executable with:
-   ```bash
-   chmod +x start_portfolio.sh
-   ```
+1. **Port already in use**
+   - The default port is 3001. If it's already in use, you can change it in `server/config.js`
+   - The `start_portfolio.sh` script automatically attempts to kill processes using port 3001
+   - Alternatively, kill the process manually: `npx kill-port 3001`
 
-2. **Server Port Conflict**
-   - Error: `EADDRINUSE: address already in use :::3001`
-   - Solution: Change the port using environment variable or kill the process using the port
-   ```bash
-   # Find process using port 3001
-   lsof -i :3001
-   # Kill the process
-   kill -9 [PID]
+2. **Dependencies issues**
+   - If you encounter dependency issues, try: `npm clean-cache && npm install`
+   - The `start_portfolio.sh` script automatically installs dependencies if needed
    ```
 
 3. **Images Not Displaying**
@@ -205,6 +264,7 @@ The color scheme can be modified in the `:root` section of `styles.css`. The cur
    - Check browser console for errors (F12 > Console tab)
    - Ensure script tags are properly placed in HTML
    - Verify event listeners are attached to existing elements
+   - Check for module import/export errors
 
 ## Browser Compatibility
 
@@ -216,24 +276,55 @@ This portfolio is designed to work on all modern browsers including:
 
 ## Recent Improvements
 
-### Code Refactoring
-- The codebase has been refactored to improve organization and reduce redundancy. Utility functions have been created for modal and notification handling.
+### Performance Optimizations (April 2025)
+- **Shared Observer Pattern**: Implemented shared IntersectionObserver instances for better memory usage and performance
+- **Optimized Image Loading**: Enhanced lazy loading with preloading, proper placeholders, and native browser support
+- **Non-Blocking UI**: Implemented batch processing and incremental rendering to prevent main thread blocking
+- **Memory Management**: Added proper cleanup of data attributes and references to reduce memory usage
+- **Efficient DOM Operations**: Used DocumentFragment and optimized loops for better rendering performance
+- **Animation Optimization**: Leveraged requestAnimationFrame for smoother animations and better visual performance
+- **Reduced Layout Thrashing**: Minimized layout recalculations by batching read/write operations
+- **Cached Computations**: Added caching for frequently used values and placeholder images
 
-### Standardized Image Paths
-- All project images now use standardized relative paths from the `/images` directory instead of placeholder URLs.
+### Error Handling Bridge System (April 2025)
+- **Unified Error Handling**: Created a consistent error handling approach across server and client sides
+- **Error Bridge Module**: Implemented a bridge to translate server errors to client-side format
+- **Enhanced Error Responses**: Added structured error responses with improved user feedback
+- **Standardized Error Objects**: Created consistent error object structure with timestamps and severity levels
+- **Improved Error Pages**: Enhanced error pages with better styling and user experience
+- **Structured Error Logging**: Implemented detailed error logging with appropriate severity levels
 
-### Enhanced Error Handling
-- Improved error handling in the server to provide better logging and structured error responses for API endpoints.
+### Clean Code Refactoring (April 2025)
+- **Function Decomposition**: Refactored large functions into smaller, focused ones with single responsibilities
+- **Enhanced Error Handling**: Implemented consistent error handling with custom error types and detailed context
+- **Improved API Service**: Added retry logic, better error categorization, and enhanced response handling
+- **Promise-Based Execution**: Replaced callback-based code with Promise-based alternatives for better async flow
+- **Redundancy Removal**: Eliminated duplicate files, consolidated image directories, and removed unused code
+- **Optimized Imports**: Removed global imports in favor of local imports where needed
 
-### Updated Project Structure
-- The project structure has been updated to reflect the new organization, including the addition of images in the `/images` directory.
+### Comprehensive Modular Architecture
+- **UI Components Module**: Extracted UI-related functions for better organization
+- **Event Handlers Module**: Centralized event handling logic with improved error handling
+- **Project Data Module**: Created a dedicated module for project data management
+- **API Service Module**: Enhanced error handling with timeout management and form validation
+- **Direct Module Imports**: Removed compatibility wrappers for a cleaner codebase
+- **Configuration Module**: Centralized all application settings in one place
+- **Feature Flag System**: Implemented consistent feature flag checks throughout the codebase
+
+### Code Quality Enhancements
+- Implemented Clean Code principles throughout the project
+- Enhanced error handling with detailed error messages
+- Improved form validation with comprehensive email validation
+- Added proper documentation with JSDoc comments
+- Maintained backward compatibility while transitioning to the new architecture
+
+### Server-Side Improvements
+- Enhanced start_portfolio.sh script with better error handling and dependency management
+- Removed redundant imports from server.js
+- Improved serveStaticFile function with enhanced logging and error handling
+- Added proper error handling for API endpoints
+- Implemented structured logging with different severity levels
 
 ## License
 
-This project is available under the MIT License. See the LICENSE file for details.
-
----
-
-Created by Héctor Corbellini for showcasing Java development skills and services.
-
-Last updated: March 2024
+MIT License. See LICENSE file for details.

@@ -7,13 +7,16 @@ const path = require('path');
 // Base directory for the application
 const BASE_DIR = path.resolve(__dirname, '..');
 
+// Environment settings
+const isProduction = process.env.NODE_ENV === 'production';
+
 module.exports = {
     // Server configuration
-    host: 'localhost',
-    port: 3001,
+    host: process.env.HOST || 'localhost',
+    port: process.env.PORT || 3001,
     
-    // Default content type
-    defaultContentType: 'application/octet-stream',
+    // Environment settings
+    isProduction,
     
     // File paths
     paths: {
@@ -25,12 +28,32 @@ module.exports = {
         projects: path.join(BASE_DIR, 'projects')
     },
     
-    // Environment settings
-    environment: process.env.NODE_ENV || 'development',
+    // Default content type
+    defaultContentType: 'application/octet-stream',
     
     // Logging settings
     logging: {
-        level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
-        format: process.env.NODE_ENV === 'production' ? 'json' : 'pretty'
+        level: isProduction ? 'info' : 'debug',
+        format: isProduction ? 'json' : 'pretty'
+    },
+
+    // Cache settings
+    cache: {
+        enabled: isProduction,
+        ttl: 5 * 60 * 1000, // 5 minutes
+        maxSize: 50 // Maximum number of files to cache
+    },
+
+    MIME_TYPES: {
+        '.html': 'text/html',
+        '.css': 'text/css',
+        '.js': 'text/javascript',
+        '.json': 'application/json',
+        '.png': 'image/png',
+        '.jpg': 'image/jpeg',
+        '.jpeg': 'image/jpeg',
+        '.gif': 'image/gif',
+        '.svg': 'image/svg+xml',
+        '.ico': 'image/x-icon'
     }
 };

@@ -281,7 +281,7 @@ header .container {
     background-color: var(--darker-bg);
 }
 
-/* Notification styles */
+/* Notification styles - Used by JavaScript for dynamic notifications */
 .notification {
     position: fixed;
     top: 20px;
@@ -389,24 +389,12 @@ header .container {
     font-size: 0.95rem;
 }
 
-.card-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 15px;
-}
-
-.card-tag {
-    background-color: rgba(98, 0, 234, 0.2);
-    color: var(--secondary-color);
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-}
-
 .card-links {
     display: flex;
     gap: 15px;
+    justify-content: center;
+    margin-top: 5px;
+    padding-bottom: 15px;
 }
 
 .card-link {
@@ -427,6 +415,44 @@ header .container {
 
 .card-link:hover {
     color: var(--secondary-color);
+}
+
+/* Lazy Loading Styles - Used by JavaScript for image loading */
+.project-image {
+    transition: opacity 0.3s ease;
+    opacity: 1;
+}
+
+.project-image:not(.loaded) {
+    opacity: 0.6;
+}
+
+.project-image.loaded {
+    opacity: 1;
+}
+
+.image-placeholder {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: #f0f0f0;
+    color: #999;
+}
+
+.image-placeholder i {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.image-placeholder p {
+    font-size: 0.9rem;
+}
+
+.image-error {
+    background-color: #fff0f0;
 }
 
 /* Modal Styles */
@@ -617,23 +643,7 @@ header .container {
     display: block;
 }
 
-.image-placeholder {
-    width: 300px;
-    height: 300px;
-    background-color: var(--card-bg);
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: var(--text-muted);
-    border: 2px dashed var(--border-color);
-}
-
-.image-placeholder i {
-    font-size: 5rem;
-    margin-bottom: 10px;
-}
+/* Profile Image Styles */
 
 .profile-placeholder {
     width: 100%;
@@ -757,6 +767,42 @@ footer {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* Accessibility Styles */
+
+/* Enhanced focus styles - Keeping for accessibility */
+a:focus,
+button:focus,
+input:focus,
+textarea:focus,
+select:focus,
+[tabindex]:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(98, 0, 234, 0.5);
+}
+
+.project-card:focus {
+    outline: none;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3), 0 0 0 3px rgba(98, 0, 234, 0.5);
+}
+
+.card-link:focus {
+    color: var(--secondary-color);
+    text-decoration: underline;
+}
+
+/* High contrast mode support - Important for accessibility */
+@media (forced-colors: active) {
+    .card-link:focus,
+    button:focus,
+    a:focus {
+        outline: 2px solid CanvasText;
+    }
+    
+    .project-card {
+        border: 1px solid CanvasText;
     }
 }
 
