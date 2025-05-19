@@ -12,7 +12,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
     // Server configuration
-    host: process.env.HOST || 'localhost',
+    host: process.env.HOST || '0.0.0.0',
     port: process.env.PORT || 3001,
     
     // Environment settings
