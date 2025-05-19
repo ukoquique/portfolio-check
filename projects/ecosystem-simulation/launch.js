@@ -9,7 +9,9 @@ const fs = require('fs');
 const { logger } = require('../../server/utils/logger');
 
 // Path to the ecosystem simulation project
-const ECOSYSTEM_PATH = '/root/CascadeProjects/ISLA/ecosystem-simulation-';
+const ECOSYSTEM_PATH = process.env.NODE_ENV === 'production'
+    ? null // No physical path in production
+    : '/root/CascadeProjects/ISLA/ecosystem-simulation-';
 
 /**
  * Handle the launch request for the ecosystem simulation
@@ -19,8 +21,19 @@ const ECOSYSTEM_PATH = '/root/CascadeProjects/ISLA/ecosystem-simulation-';
 async function handleLaunch(req, res) {
     logger('info', 'Launching ecosystem simulation');
     
-    // Check if the ecosystem simulation path exists
-    if (!fs.existsSync(ECOSYSTEM_PATH)) {
+    // Handle production environment differently
+    if (process.env.NODE_ENV === 'production') {
+        logger('info', 'Running in production environment - redirecting to GitHub repository');
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        return res.end(JSON.stringify({
+            success: true,
+            message: 'Redirecting to GitHub repository',
+            redirect: 'https://github.com/HectorCorbellini/Portfolio-windsurf-march6/tree/ecosystem-simulation-clean-code'
+        }));
+    }
+    
+    // Check if the ecosystem simulation path exists in development
+    if (!ECOSYSTEM_PATH || !fs.existsSync(ECOSYSTEM_PATH)) {
         logger('error', `Ecosystem simulation path does not exist: ${ECOSYSTEM_PATH}`);
         res.writeHead(500, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({ 

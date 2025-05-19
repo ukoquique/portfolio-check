@@ -130,6 +130,12 @@ const launchEcosystemSimulation = () => {
     // Delegate to the API service and ensure consistent response format
     return apiService.launchEcosystemSimulation()
         .then(response => {
+            // Handle redirect response (for production environment)
+            if (response.redirect) {
+                // Open the redirect URL in a new tab
+                window.open(response.redirect, '_blank');
+            }
+            
             // Ensure we have a standardized response format
             return {
                 success: true,
